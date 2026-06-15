@@ -10,7 +10,7 @@
 
 // 1
 
-// var x = 1;
+// va r x = 1;
 // a(); b();
 // console.log(x);
 
@@ -527,3 +527,167 @@ undefined would have been logged.
 // First Class Citizens - Means the same as First Class Functions
 
 // Arrow Functions
+
+// -------------------------------
+
+// Callback Functions in JS
+
+// A function passed as an argument to another function is called a callback function. But, it has some very powerful features.
+
+// function x(y) {
+//     console.log(y);
+// }
+
+// x(function y() {});
+
+// Advantages - Used in setTimeout, event listeners, etc. and helps us to write asynchronous code.
+
+// Main thread and Thread Blocking
+
+// setTimeout(function () {
+//     console.log("timer");
+// }, 3000);
+
+// function x(y) {
+//     console.log("x");
+//     y();
+// }
+
+// x(function y() {
+//     console.log("y");
+// });
+
+// Now, JS uses only the call stack, so can call it as the main thread. So, everything, executed on the page
+// will be done using the call stack.
+
+// So, when any operation blocks the main thread, then it is known as Thread Blocking.
+// And since, setTimeout takes time, we use async code, so that the main thread isnt blocked.
+
+// --------------------------------
+
+// Event Listeners and Closures
+
+// Rememeber, when ever we add an event listerner to any element, we also need to remove it, so as to avoid memory leaks and this is called
+// garbage collection and JS does this automatically, but we need to make sure that we remove the event listener when it is not needed,
+// so that the memory can be freed up.
+
+// Why, cause, event listeners are heavy. Heavy, cause, callback function, forms a closure, and even if we dont use any variable
+// it is still hold up in the memory cause of the closure formed by the callback function.
+
+// -------------------------------
+
+// Trust Issues with setTimeout
+
+// console.log("Start");
+
+// setTimeout(function() {
+//     console.log("Timer");
+// }, 5000);
+
+// console.log("End");
+// More 1000 lines of code (approx ~10s)
+
+// We expect to see the Timer after 5 seconds, but we see it after 10 seconds, cause, first the start is logged, then
+// when the setTimeout is encountered, the callback function is stored somewhere and attached a timer to it, and JS
+// continues executing the rest of the code, and after 10 seconds, when the main thread is free, then it checks for the
+// callback function, and if the timer is expired, then it pushes the callback function to the call stack and executes it.
+// So, this is how setTimeout works and this is why we see Timer after 10 seconds instead of 5 seconds.
+
+// setTimeout of 0 seconds
+
+// console.log("Start");
+
+// function cb() {
+//     console.log("Timer");
+// };
+// cb();
+
+// setTimeout(function cb() {
+//     console.log("Timer");
+// }, 0);
+
+// console.log("End");
+
+// The output will be Start, End and then Timer. Even though, the timer is 0, but it will first stored in Web API enviornment,
+// attach a timer, and then when the call stack is empty, then the callback function will be pushed to the call stack and
+// executed.
+
+// ----------------------------------------------
+
+// Prototype and Prototypal Inheritance in JS
+
+// Ever thought, how, variables, arr, function, object, etc. get access to various methods, like length, push, pop, etc. ?
+// So, this is because of prototype in JS. So, whenver we create anyy variable, arr, function, object, etc. in JS, then
+// a hidden property called __proto__ is created in the memory, and this __proto__ is a reference to the prototype of that
+// variable, arr, function, object, etc. and this prototype is an object which contains various methods and properties that
+// are accessible to that variable, arr, function, object, etc. and this is how they get access to various methods and properties.
+
+// To, access the hidden object, that JS attaches, we can use the __proto__ or do Array.prototype, which gives us the object that is
+// the prototype of the array, and this object contains various methods and properties that are accessible to the array.
+
+// Prototype chain - So, arr.__proto__ is the prototype of arr, which is equal to the prototype of Array, and
+// arr.__proto__.__proto__ is the prototype of the prototype of arr, which is equal to the prototype of Object,
+// and arr.__proto__.__proto__.__proto__ is null, as it is the end of the prototype chain.
+
+// So, you can say, prototype of prototype of Array is the prototype of Object, and prototype of prototype of Object
+// is null, and hence it is the end of the prototype chain.
+
+// So the chain is, arr --> Array.prototype --> Object.prototype --> null
+// And, arr.__proto__ === Array.prototype, and object.__proto__ === Object.prototype
+
+// arr = [1,2,3];
+// console.log(arr.__proto__);
+
+// const obj1 = {
+//     city: "New York",
+// }
+
+// const obj = {
+//     name: "John",
+//     city: "Los Angeles",
+//     getIntro: function() {
+//         console.log(`My name is ${this.name} and I live in ${this.city}`);
+//     },
+// }
+
+// const obj2 = {
+//     name: "Jane",
+//     age: 30,
+// }
+
+// This is called prototypal inheritance, as obj2 is inheriting the properties and methods of obj,
+// and hence can access the getIntro method of obj, and this is possible because of the __proto__ property,
+// which is a reference to the prototype of obj 2, which is obj, and hence obj2 can access the properties
+// and methods of obj.
+
+// obj2.__proto__ = obj;
+// obj2.__proto__ = obj1;
+
+// Here, the obj2 can access the properties of obj1, but it cannot access the getIntro method of obj, as it is not in
+// the prototype chain of obj2, and hence it is not accessible to obj2, and hence undefined is logged.
+
+// obj2.__proto__ = obj;
+// obj.__proto__ = obj1;
+
+// obj2.getIntro(); // Logs - My name is Jane and I live in Los Angeles, as it first checks for getIntro in obj2, and doesnt find it there, and then
+// console.log(obj2.name); // Logs - Jane, as it first checks for name in obj2, and finds it there, and hence logs it
+// console.log(obj2.city); // Logs - New York, as it first checks for city in obj2, and doesnt find it there, and then
+// // checks for city in obj, and finds it there, and hence logs it
+// console.log(obj.age); // Logs - undefined
+
+// Remember, in object property lookup, if that property is not found, undefined is logged, but in case of a variable lookup,
+// if the variable is not found, in it's scope chain, then a ReferenceError is thrown, variable is not defined.
+// So, this is the difference between variable lookup and object property lookup in JS.
+
+// In case of obj.city, first the obj2 is checked, and if not found, it's proto is checked and if not found, then the
+// proto of proto is checked and so on, until it reaches null, and if not found, then undefined is logged.
+
+// Imp questions based on this
+
+// What is Prototype?
+// What is Prototypal Inheritance?
+// What is Prototype Chain?
+// Why we call it _proto_ ?
+// What is inhertance in Javascript?
+
+// --------------------------------------
