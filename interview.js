@@ -131,3 +131,104 @@ copiedArr[0] = 10;
 console.log(copiedArr);
 
 // ------------------------------------------------------
+
+console.log("------------------------------------------------------");
+console.log("Comparison Questions in JS");
+console.log("------------------------------------------------------");
+
+/*
+
+- Comparison Questions in JS
+
+Q) Two types of equality checks in JS - Strict Equality (===) and Loose Equality (==)
+
+Ans - Strict Equality (===) checks for both value and type equality. It returns true only if both
+the value and type are the same.
+
+*/
+
+// - Loose Equality (==)
+
+console.log(5 == "5"); // true, because the string "5" is coerced to a number before comparison.
+console.log("" == false); // true, because the empty string is coerced to false before comparison.
+console.log("" == 0); // true, because the empty string is coerced to 0 before comparison.
+
+// - Strict Equality (===)
+
+console.log(5 === "5"); // false, because the types are different (number vs string).
+console.log("" === false); // false, because the types are different (string vs boolean).
+console.log("" === 0); // false, because the types are different (string vs number).
+
+/*
+
+- The Special Rule
+
+The rule or the exception in JS is that null == undefined is true. Although, null === undefiend is false, because they
+are of different types. But for loose equality, they are considered equal, cause they both are considered missing value.
+
+And everything else like, null == anything (like 0, false, "", etc.) is false. Same for
+undefined == anything (like 0, false, "", etc.) is also false.
+
+One thing to notice, that Number(null) is 0, but Number(undefined) is NaN. So, one thing to confuse about is that, if null is 0,
+then why null == 0 is false. The reason is that, the loose equality (==) does not convert null or undefined to a number for comparison.
+It only considers them equal to each other and not to any other value.
+
+So, during equality comparison, null and undefined are never coerced to a number, and they are only equal to each other (in loose equality)
+and not to any other value.
+
+- Important
+
+Now, if we do, null >= 0, then it is true, because >, <, <=, >= are ordering operators (operators that determine the order of
+two values). And, hence they coerce null to a number (0) for comparison. So, null >= 0 is true, but null > 0 is false,
+because null is not greater than 0. And, undefined >= 0 is false, because undefined is coerced to NaN, and any comparison
+with NaN is false.
+
+*/
+
+console.log(null == undefined); // true
+console.log(null === undefined); // false
+
+console.log(null == 0); // false
+console.log(undefined == 0); // false
+
+console.log(null >= 0); // true
+console.log(null > 0); // false
+console.log(undefined > 0); // false
+
+/*
+
+- Some Important Questions
+
+[] == [], is false, cause in JS, objects (including arrays) are compared by reference, not by value. So, two different array
+instances are not equal.
+
+[] == ![], is true, because in JS, the objects are truthy (means, Boolean([]) or Boolean({}) is true). So, ![] is false, and
+[] is coerced to string "", and then to number 0, and on the right side, false is coerced to number 0, so the comparison becomes 0 == 0,
+which is true.
+
+Now, {} == {}, is false, same reason as [] == [].
+
+But, {} == !{}, is also false, cause, {} is truthy, so !{} is false, and {} is coerced to string, which is "[object Object]",
+which is coerced to NaN, and false is coerced to 0, so the comparison becomes NaN == 0, which is false.
+
+Note :- Anything compared with NaN is false, so the result is false.
+
+*/
+
+console.log([] == []); // false
+console.log([] == ![]); // true
+
+console.log({} == {}); // false
+console.log({} == !{}); // false
+
+// Similiarly think of this too
+
+console.log({} == false); // false
+console.log({} == true); // false
+
+console.log([] == false); // true
+console.log([0] == false); // true
+console.log([1] == true); // true
+
+
+// ------------------------------------------------------
