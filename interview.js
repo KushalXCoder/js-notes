@@ -347,3 +347,102 @@ const obj4 = {
 }
 
 obj4.greet();
+
+// Applying debounce and throttling
+
+// debounce
+
+/*
+
+- Debouncing is delaying the execution of a function until a certain of time has elapsed since
+the last call.
+
+*/
+
+const user = {
+    name: "Kushal",
+    greet(msg) {
+        console.log(msg, this.name);
+    }
+}
+
+function debounce(fn,wait) {
+    let timer;
+    return function(...args) {
+        clearTimeout(timer);
+        timer = setTimeout(() => fn.apply(this,args), wait);
+    };
+}
+
+user.debounced = debounce(user.greet,500);
+user.debounced("Hi");
+
+// Throttling
+
+/*
+
+- Throttling caps how often a function can run, that is at most once per time
+interval, regardless of how many times it is called.
+
+- Two types - leading and trailing
+
+In leading, only the first call is executed and rest all in that interval are dropped
+while in trailing the first call and the last call after the time interval has finished
+is executed.
+
+*/
+
+// Leading call
+
+// function throttle(fn,limit) {
+//     let waiting = false;
+//     return function(...args) {
+//         if(waiting) return;
+
+//         fn.apply(this,args);
+//         waiting = true;
+
+//         setTimeout(() => {
+//             waiting = false;    
+//         }, limit);
+//     }
+// }
+
+// Trailing call
+function throttle(fn, limit) {
+    let waiting = false;
+    let lastArgs = null;
+
+    return function(...args) {
+        if(!waiting) {
+            waiting = true;
+            fn.apply(this,args);
+            // fn(...args);
+
+            setTimeout(() => {
+                waiting = false;
+                if(lastArgs) {
+                    fn.apply(this,lastArgs);
+                    // fn(...lastArgs);
+                    lastArgs = null;
+                }
+            }, limit);
+        } else {
+            lastArgs = args;
+        }
+    }
+}
+
+const ans = throttle((val) => {
+    console.log(val);
+}, 1000);
+
+// window.addEventListener("scroll", ans);
+
+// const ans = debounce((val) => {
+//     console.log("Hello", val);
+// }, 500);
+
+document.getElementById('search').addEventListener('input', (e) => {
+  ans(e.target.value);
+});
